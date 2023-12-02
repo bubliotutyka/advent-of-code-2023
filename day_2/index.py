@@ -39,35 +39,32 @@ def get_games():
     return games
 
 
-def is_valid_set(set):
-    for color in set:
-        if set[color] > max_cube[color]:
-            return False
 
-    return True
+def get_game_power(game):
+    minimum_red_cubes = 0
+    minimum_green_cubes = 0
+    minimum_blue_cubes = 0
 
-
-def is_valid_game(game):
     for set in game:
-        if not is_valid_set(set):
-            return False
+        if "red" in set and set["red"] > minimum_red_cubes:
+            minimum_red_cubes = set["red"]
 
-    return True
+        if "green" in set and set["green"] > minimum_green_cubes:
+            minimum_green_cubes = set["green"]
 
+        if "blue" in set and set["blue"] > minimum_blue_cubes:
+            minimum_blue_cubes = set["blue"]
+
+    return minimum_red_cubes * minimum_green_cubes * minimum_blue_cubes
 
 def get_result():
-    valid_games_ids = []
+    games_power = []
     games = get_games()
 
-    i = 0
+    for game in games:
+        games_power.append(get_game_power(game))
 
-    while i < len(games):
-        if (is_valid_game(games[i])):
-            valid_games_ids.append(i + 1)
-
-        i += 1
-
-    return sum(valid_games_ids)
+    return sum(games_power)
 
 
 print(get_result())
